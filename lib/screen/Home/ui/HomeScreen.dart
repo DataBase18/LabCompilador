@@ -1,3 +1,4 @@
+import 'package:compiladorestareauno/screen/Home/ui/HomeWidget.dart';
 import 'package:compiladorestareauno/widget/AlertBasic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,9 +34,7 @@ class _HomeState extends State<Home> implements EventObserver {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Text("Home"),
-    );
+    return HomeBody(state: state, viewModel: viewModel);
   }
 
   @override

@@ -74,6 +74,7 @@ class InputBasic extends StatelessWidget {
           await onSubmit!();
         }
       },
+      expands: true,
       textInputAction: textInputAction,
       onTap: onTab,
       selectionControls: controllerSelector,
@@ -85,6 +86,7 @@ class InputBasic extends StatelessWidget {
       controller: controller,
       onChanged: onChange,
       validator: validator,
+      textAlignVertical: TextAlignVertical.top,
       focusNode: focus,
       decoration: InputDecoration(
           alignLabelWithHint: labelTopPosition,

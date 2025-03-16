@@ -3,6 +3,7 @@
 import 'package:compiladorestareauno/screen/Home/ui/HomeScreen.dart';
 import 'package:compiladorestareauno/theme/Themes.dart';
 import 'package:flutter/material.dart';
+
 import 'core/GlobalConstants.dart';
 
 void main(){
@@ -16,7 +17,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      theme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme), //ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       routes: {
         GlobalConstants.homeScreenPath: (_) =>const  Home(),
