@@ -46,6 +46,9 @@ class _HomeState extends State<Home> implements EventObserver {
       case ChangeLoadingScreen:
         _handleChangeLoadingScreen(event as ChangeLoadingScreen);
         break;
+      case SetVariables:
+        _handleSetVariables(event as SetVariables);
+        break;
     }
   }
 
@@ -60,6 +63,12 @@ class _HomeState extends State<Home> implements EventObserver {
   void _handleChangeLoadingScreen(ChangeLoadingScreen event) {
     setState(() {
       state.loadingScreen = event.newState;
+    });
+  }
+
+  void _handleSetVariables(SetVariables event) {
+    setState(() {
+      state.vars=event.rows;
     });
   }
 }

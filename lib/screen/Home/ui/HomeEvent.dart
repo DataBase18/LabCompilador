@@ -1,5 +1,6 @@
 
 import 'package:compiladorestareauno/mvvm/observer.dart';
+import 'package:flutter/material.dart';
 
 
 class ShowSimpleAlert extends ViewEvent {
@@ -15,3 +16,10 @@ class ChangeLoadingScreen extends ViewEvent {
   ChangeLoadingScreen(this.newState) :super("ChangeLoadingScreen");
 }
 
+
+
+
+class SetVariables extends ViewEvent {
+  List<DataRow> rows = [];
+  SetVariables({required this.rows}):super("SetVariables");
+}

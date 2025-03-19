@@ -66,11 +66,7 @@ class HomeBody extends StatelessWidget {
                         DataColumn(label: Text(HomeConstants.varsTitle)),
                         DataColumn(label: Text(HomeConstants.terminalsTitle)),
                       ],
-                      rows: [
-                        DataRow(
-                            cells: [DataCell(Text("VAR")), DataCell(Text("TERMINAL A"))   ]
-                        )
-                      ],
+                      rows: state.vars,
                     )
                   ],
                 ),
