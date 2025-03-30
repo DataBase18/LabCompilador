@@ -26,13 +26,16 @@ class HomeViewModel extends EventViewModel {
     for (var subMatch in individualVars){
       varsThisProduction.add(subMatch[1]??"");
     }
-    return varsThisProduction;
+    return varsThisProduction.toSet().toList();
   }
 
   void compile (String code){
 
-    List<DataRow> varsList = [];
-
+    //pARA LA MATRIZ DE PROUDCCIONES, AGREGAR ATRIBUTO AL MODELO QUE SE LLAME:
+    //PRODUCTIOSN, LISTA DE ITEMS QUE AGREGARAS EN PRIMER ISNTANCIA EL INDEICE GRUPAL
+    //NUMERO 2 DE LA REEGX, YA QUEES LA ASIGNACION COMPELTA, LUEGO , HACES SPLIT CON  |
+    // COMO YA VALIDASTE que lav ariable value a esas alutras solo tenga correctas,
+    // todas las partes que encuentre seran válidas
     final variablesRegexCompile = RegExp(r"\s*([A-Za-z0-9_]+)\s*=\s*(('([A-Za-z0-9 _]*)')+(\s*\|\s*('([A-Za-z0-9 _]*)')+)*)");
     Iterable<RegExpMatch> variablesMatches = variablesRegexCompile.allMatches(code);
 
@@ -59,19 +62,13 @@ class HomeViewModel extends EventViewModel {
         int existVarIndex = vars.indexWhere((element) => element.varName == varName ,);
         CompilerVariableModel newValue = vars.elementAt(existVarIndex);
         newValue.terminals = [...newValue.terminals, ...getIndividualVars(values)];
+        newValue.terminals = newValue.terminals.toSet().toList();
         vars[existVarIndex] = newValue;
       }
     }
 
-    for (var varCompiled in vars) {
-      varsList.add(
-          DataRow(
-              cells: [  DataCell(Text(varCompiled.varName)), DataCell(Text(varCompiled.terminals.toString()))  ]
-          )
-      );
-    }
 
-    notify(SetVariables(rows: varsList));
+    notify(SetVariables(rows: vars));
   }
 
 }

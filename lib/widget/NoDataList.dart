@@ -15,14 +15,14 @@ class NoDataList extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          text ?? "Sin datos para mostrar",
+          text ?? "Aún no has cargado código!",
           style: const TextStyle(
             fontSize: 18
           ),
         ),
         SizedBox(height: height*0.01,),
         Lottie.asset(
-          lottiePath ?? "assets/dreamAnimation.json"
+          lottiePath ?? "assets/news.json"
         )
       ],
     );

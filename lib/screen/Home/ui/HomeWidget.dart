@@ -1,5 +1,6 @@
 import 'package:compiladorestareauno/screen/Home/data/HomeConstants.dart';
 import 'package:compiladorestareauno/widget/InputBasic.dart';
+import 'package:compiladorestareauno/widget/NoDataList.dart';
 import 'package:flutter/material.dart';
 import 'package:compiladorestareauno/screen/Home/ui/HomeState.dart';
 import 'package:compiladorestareauno/screen/Home/ui/HomeViewModel.dart';
@@ -44,29 +45,79 @@ class HomeBody extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: height*0.05,),
             Expanded(
               child: Padding(
-                padding:  EdgeInsets.symmetric(horizontal: width*0.02, vertical: height*0.02),
+                padding:  EdgeInsets.symmetric(horizontal: width*0.01, vertical: height*0.01),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: width*0.7,
+                      width: width*0.6,
                       child: InputBasic(
                         maxLines: null,
                         keyboard: TextInputType.multiline,
                         labelTopPosition: true,
                         controller: state.inputCode,
+                        placeholderHelp: HomeConstants.placeholderInputCode,
+                        labelText:HomeConstants.placeholderInputCode,
                       ),
                     ),
                     SizedBox(width: width*0.02,),
-                    DataTable(
-                      columns: const [
-                        DataColumn(label: Text(HomeConstants.varsTitle)),
-                        DataColumn(label: Text(HomeConstants.terminalsTitle)),
-                      ],
-                      rows: state.vars,
+                    Expanded(
+                      child: state.vars.isNotEmpty ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(HomeConstants.titleTableTerminals, style: Theme.of(context).textTheme.titleLarge,),
+                          SizedBox(height: height*0.01,),
+                          DataTable(
+                            border: TableBorder.all(
+                              color: Colors.black,
+                              width: 0.4,
+                            ),
+                            headingRowHeight: 35,
+                            dataRowMinHeight: 25,
+                            dataRowMaxHeight: 30,
+                            columns: const [
+                              DataColumn(label: Text(HomeConstants.varsTitle), ),
+                              DataColumn(label: Text(HomeConstants.terminalsTitle)),
+                            ],
+                            rows: state.vars.map((e) {
+                              return DataRow(
+                                  cells: [
+                                    DataCell(Text(e.varName), ),
+                                    DataCell(Text(e.terminals.toString()))
+                                  ]
+                              );
+                            },).toList(),
+                          ),
+
+                          SizedBox(height: height*0.05,),
+
+                          Text(HomeConstants.titleTableProductions, style: Theme.of(context).textTheme.titleLarge,),
+                          SizedBox(height: height*0.01,),
+                          DataTable(
+                            border: TableBorder.all(
+                              color: Colors.black,
+                              width: 0.4,
+                            ),
+                            headingRowHeight: 35,
+                            dataRowMinHeight: 25,
+                            dataRowMaxHeight: 30,
+                            columns: const [
+                              DataColumn(label: Text(HomeConstants.varsTitle), ),
+                              DataColumn(label: Text(HomeConstants.terminalsTitle)),
+                            ],
+                            rows: state.vars.map((e) {
+                              return DataRow(
+                                  cells: [
+                                    DataCell(Text(e.varName), ),
+                                    DataCell(Text(e.terminals.toString()))
+                                  ]
+                              );
+                            },).toList(),
+                          ),
+                        ],
+                      ) : const NoDataList(),
                     )
                   ],
                 ),
