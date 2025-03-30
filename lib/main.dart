@@ -17,8 +17,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme), //ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme), //ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      //darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       routes: {
         GlobalConstants.homeScreenPath: (_) =>const  Home(),
       },
