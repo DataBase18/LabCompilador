@@ -105,13 +105,13 @@ class HomeBody extends StatelessWidget {
                             dataRowMaxHeight: 30,
                             columns: const [
                               DataColumn(label: Text(HomeConstants.varsTitle), ),
-                              DataColumn(label: Text(HomeConstants.terminalsTitle)),
+                              DataColumn(label: Text(HomeConstants.productionTitle)),
                             ],
-                            rows: state.vars.map((e) {
+                            rows: state.productions.map((e) {
                               return DataRow(
                                   cells: [
                                     DataCell(Text(e.varName), ),
-                                    DataCell(Text(e.terminals.toString()))
+                                    DataCell(Text(e.value))
                                   ]
                               );
                             },).toList(),

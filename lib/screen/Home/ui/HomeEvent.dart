@@ -1,5 +1,6 @@
 
 import 'package:compiladorestareauno/Model/CompilerVariableModel.dart';
+import 'package:compiladorestareauno/Model/ProductionModel.dart';
 import 'package:compiladorestareauno/mvvm/observer.dart';
 import 'package:flutter/material.dart';
 
@@ -23,4 +24,11 @@ class ChangeLoadingScreen extends ViewEvent {
 class SetVariables extends ViewEvent {
   List<CompilerVariableModel> rows = [];
   SetVariables({required this.rows}):super("SetVariables");
+}
+
+
+
+class SetProductions extends ViewEvent {
+  List<ProductionModel> productions;
+  SetProductions(this.productions):super("SetProductions");
 }

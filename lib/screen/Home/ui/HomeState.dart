@@ -1,4 +1,5 @@
 import 'package:compiladorestareauno/Model/CompilerVariableModel.dart';
+import 'package:compiladorestareauno/Model/ProductionModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,4 +9,5 @@ class HomeState {
   TextEditingController inputCode = TextEditingController();
 
   List<CompilerVariableModel> vars = [];
+  List<ProductionModel> productions = [];
 }
