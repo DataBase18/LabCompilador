@@ -36,7 +36,7 @@ class HomeViewModel extends EventViewModel {
   }
 
   void compile (String code){
-    final variablesRegexCompile = RegExp(r"\s*([A-Za-z0-9_]+)\s*=\s*(('([A-Za-z0-9 _]*)')+(\s*\|\s*('([A-Za-z0-9 _]*)')+)*)");
+    final variablesRegexCompile = RegExp(r"\s*([A-Za-z0-9_]+)\s*=\s*((('([A-Za-z0-9 _]*)')|([A-Za-z0-9_]+))+(\s*\|\s*(('[A-Za-z0-9 _]*')+|([A-Za-z0-9_]+))+)*)");
     Iterable<RegExpMatch> variablesMatches = variablesRegexCompile.allMatches(code);
 
     String varName ;
