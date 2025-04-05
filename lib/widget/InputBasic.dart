@@ -26,6 +26,7 @@ class InputBasic extends StatelessWidget {
       this.onTabRightIcon,
       this.readOnly = false,
       this.onTab,
+      this.labelFontSize = 15,
       this.onExitFocus,
       this.labelTopPosition=false, this.textInputAction});
 
@@ -55,6 +56,7 @@ class InputBasic extends StatelessWidget {
   final Function()? onExitFocus;
   final bool labelTopPosition;
   final TextInputAction? textInputAction;
+  final double labelFontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +94,9 @@ class InputBasic extends StatelessWidget {
           alignLabelWithHint: labelTopPosition,
           border: const OutlineInputBorder(),
           labelText: labelText,
+          labelStyle: TextStyle(
+            fontSize:labelFontSize
+          ),
           hintText: placeholderHelp,
           contentPadding: internPadding,
           suffixIcon: rightIcon != null

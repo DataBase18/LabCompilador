@@ -35,19 +35,17 @@ class HomeViewModel extends EventViewModel {
     return productionsParts;
   }
 
-  void compile (String code){
+  void compile (String code, List<String> actualTerminals){
     final variablesRegexCompile = RegExp(r"\s*([A-Za-z0-9_]+)\s*=\s*((('([A-Za-z0-9 _]*)')|([A-Za-z0-9_]+))+(\s*\|\s*(('[A-Za-z0-9 _]*')+|([A-Za-z0-9_]+))+)*)");
     Iterable<RegExpMatch> variablesMatches = variablesRegexCompile.allMatches(code);
 
     String varName ;
     String values ;
-
     List<CompilerVariableModel> vars = [];
-
+    List<String> terminals = [];
     for(var matches in variablesMatches){
       varName = matches.group(1)??"N/A";
       values = matches.group(2)??"N/A";
-
       //Val if exits element
       CompilerVariableModel? match = vars.firstWhere(
           (element) => element.varName == varName,
@@ -56,22 +54,23 @@ class HomeViewModel extends EventViewModel {
       if (match.varName.isEmpty){
         vars.add(CompilerVariableModel(
           varName: varName,
-          terminals: getIndividualVars(values),
+          terminals: [],
           productions: getProductions(values)
         ));
       }else {
         int existVarIndex = vars.indexWhere((element) => element.varName == varName ,);
-
         CompilerVariableModel newValue = vars.elementAt(existVarIndex);
-        newValue.terminals = [...newValue.terminals, ...getIndividualVars(values)];
-        newValue.terminals = newValue.terminals.toSet().toList();
         newValue.productions = [... newValue.productions, ... getProductions(values)];
         vars[existVarIndex] = newValue;
       }
+      terminals = [...terminals, ...getIndividualVars(values) ];
     }
     List<ProductionModel> productions = getListProductions(vars);
     notify(SetVariables(rows: vars));
     notify(SetProductions(productions));
+
+    terminals = terminals.toSet().toList();
+    notify(SetTerminals(terminals));
   }
 
   List<ProductionModel> getListProductions (List<CompilerVariableModel> vars){
@@ -83,5 +82,6 @@ class HomeViewModel extends EventViewModel {
     }
     return productions;
   }
+
 
 }

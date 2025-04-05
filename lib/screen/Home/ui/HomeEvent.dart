@@ -32,3 +32,9 @@ class SetProductions extends ViewEvent {
   List<ProductionModel> productions;
   SetProductions(this.productions):super("SetProductions");
 }
+
+
+class SetTerminals extends ViewEvent {
+  List<String> terminals;
+  SetTerminals(this.terminals):super("SetTerminals");
+}

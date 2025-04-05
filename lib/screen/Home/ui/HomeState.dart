@@ -10,4 +10,5 @@ class HomeState {
 
   List<CompilerVariableModel> vars = [];
   List<ProductionModel> productions = [];
+  List<String> terminals = [];
 }

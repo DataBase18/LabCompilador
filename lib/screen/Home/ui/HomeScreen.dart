@@ -52,6 +52,9 @@ class _HomeState extends State<Home> implements EventObserver {
       case SetProductions:
         _handleSetProductions(event as SetProductions);
         break;
+      case SetTerminals:
+        _handleSetTerminals(event as SetTerminals);
+        break;
     }
   }
 
@@ -78,6 +81,12 @@ class _HomeState extends State<Home> implements EventObserver {
   void _handleSetProductions(SetProductions event) {
     setState(() {
       state.productions  = event.productions;
+    });
+  }
+
+  void _handleSetTerminals(SetTerminals event) {
+    setState(() {
+      state.terminals = event.terminals;
     });
   }
 }

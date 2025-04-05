@@ -5,7 +5,7 @@ class HomeConstants {
   static const String productionTitle="Producción";
   static const String placeholderInputCode="Entrada de código";
 
-  static const String titleTableTerminals="Tabla de terminales";
+  static const String titleTableTerminals="Vectores";
   static const String titleTableProductions="Tabla de producciones";
 
   static const String myName= "Abner Noé Ramírez Alvarez";

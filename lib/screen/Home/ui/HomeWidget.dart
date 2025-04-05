@@ -24,7 +24,7 @@ class HomeBody extends StatelessWidget {
           if (value.runtimeType == KeyDownEvent) {
             String key = value.logicalKey.keyLabel.isNotEmpty ? value.logicalKey.keyLabel : value.logicalKey.debugName!;
             if(key == "F5"){
-              viewModel.compile(state.inputCode.text);
+              viewModel.compile(state.inputCode.text, state.terminals);
             }
           }
         },
@@ -33,7 +33,7 @@ class HomeBody extends StatelessWidget {
           children: [
             IconButton(
               onPressed: (){
-                viewModel.compile( state.inputCode.text ) ;
+                viewModel.compile( state.inputCode.text, state.terminals ) ;
               },
               icon:  IntrinsicWidth(
                 child:   Row(
@@ -53,10 +53,15 @@ class HomeBody extends StatelessWidget {
                   children: [
                     SizedBox(height: height*0.02,),
                     Text(HomeConstants.myName, style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30
                     ),),
-                    Text(HomeConstants.myCode, style: Theme.of(context).textTheme.titleMedium),
-                    Text(HomeConstants.course, style: Theme.of(context).textTheme.titleMedium),
+                    Text(HomeConstants.myCode, style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontSize: 25
+                    )),
+                    Text(HomeConstants.course, style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontSize: 20
+                    )),
                     SizedBox(height: height*0.03,),
                     Expanded(
                       child: Row(
@@ -71,6 +76,8 @@ class HomeBody extends StatelessWidget {
                               controller: state.inputCode,
                               placeholderHelp: HomeConstants.placeholderInputCode,
                               labelText:HomeConstants.placeholderInputCode,
+                              fontSize: 30,
+                              labelFontSize: 20,
                             ),
                           ),
                           SizedBox(width: width*0.02,),
@@ -80,26 +87,50 @@ class HomeBody extends StatelessWidget {
                               children: [
                                 Text(HomeConstants.titleTableTerminals, style: Theme.of(context).textTheme.titleLarge,),
                                 SizedBox(height: height*0.01,),
-                                DataTable(
-                                  border: TableBorder.all(
-                                    color: Colors.black,
-                                    width: 0.4,
-                                  ),
-                                  headingRowHeight: 35,
-                                  dataRowMinHeight: 25,
-                                  dataRowMaxHeight: 30,
-                                  columns: const [
-                                    DataColumn(label: Text(HomeConstants.varsTitle), ),
-                                    DataColumn(label: Text(HomeConstants.terminalsTitle)),
+
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    DataTable(
+                                      border: TableBorder.all(
+                                        color: Colors.black,
+                                        width: 0.4,
+                                      ),
+                                      headingRowHeight: 35,
+                                      dataRowMinHeight: 25,
+                                      dataRowMaxHeight: 30,
+                                      columns: const [
+                                        DataColumn(label: Text(HomeConstants.varsTitle), ),
+                                      ],
+                                      rows: state.vars.map((e) {
+                                        return DataRow(
+                                            cells: [
+                                              DataCell(Text(e.varName), ),
+                                            ]
+                                        );
+                                      },).toList(),
+                                    ),
+                                    SizedBox(width: width*0.01,),
+                                    DataTable(
+                                      border: TableBorder.all(
+                                        color: Colors.black,
+                                        width: 0.4,
+                                      ),
+                                      headingRowHeight: 35,
+                                      dataRowMinHeight: 25,
+                                      dataRowMaxHeight: 30,
+                                      columns: const [
+                                        DataColumn(label: Text(HomeConstants.terminalsTitle)),
+                                      ],
+                                      rows: state.terminals.map((e) {
+                                        return DataRow(
+                                            cells: [
+                                              DataCell(Text(e.toString()))
+                                            ]
+                                        );
+                                      },).toList(),
+                                    ),
                                   ],
-                                  rows: state.vars.map((e) {
-                                    return DataRow(
-                                        cells: [
-                                          DataCell(Text(e.varName), ),
-                                          DataCell(Text(e.terminals.toString()))
-                                        ]
-                                    );
-                                  },).toList(),
                                 ),
                       
                                 SizedBox(height: height*0.05,),
