@@ -28,7 +28,10 @@ class InputBasic extends StatelessWidget {
       this.onTab,
       this.labelFontSize = 15,
       this.onExitFocus,
-      this.labelTopPosition=false, this.textInputAction});
+      this.labelTopPosition=false,
+      this.textInputAction,
+      this.expandInput = false
+      });
 
   final String? labelText;
   final Widget? leftIcon;
@@ -57,6 +60,7 @@ class InputBasic extends StatelessWidget {
   final bool labelTopPosition;
   final TextInputAction? textInputAction;
   final double labelFontSize;
+  final bool expandInput;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +80,7 @@ class InputBasic extends StatelessWidget {
           await onSubmit!();
         }
       },
-      expands: true,
+      expands: expandInput,
       textInputAction: textInputAction,
       onTap: onTab,
       selectionControls: controllerSelector,

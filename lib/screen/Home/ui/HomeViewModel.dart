@@ -21,11 +21,11 @@ class HomeViewModel extends EventViewModel {
 
   List<String> getIndividualVars (String valueProduction, ){
     //Find the sub vars
-    final subRegex = RegExp(r"('([A-Za-z0-9 _]*)')");
+    final subRegex = RegExp(r"('(.*)'git)");
     Iterable<RegExpMatch> individualVars = subRegex.allMatches(valueProduction);
     List<String> varsThisProduction = [];
     for (var subMatch in individualVars){
-      varsThisProduction.add(subMatch[1]??"");
+      varsThisProduction.add(subMatch[2]??"");
     }
     return   varsThisProduction.toSet().toList() ;
   }
@@ -36,7 +36,8 @@ class HomeViewModel extends EventViewModel {
   }
 
   void compile (String code, List<String> actualTerminals){
-    final variablesRegexCompile = RegExp(r"\s*([A-Za-z0-9_]+)\s*=\s*((('([A-Za-z0-9 _]*)')|([A-Za-z0-9_]+))+(\s*\|\s*(('[A-Za-z0-9 _]*')+|([A-Za-z0-9_]+))+)*)");
+    //final variablesRegexCompile = RegExp(r"\s*([A-Za-z0-9_]+)\s*=\s*((('([A-Za-z0-9 _]*)')|([A-Za-z0-9_]+))+(\s*\|\s*(('[A-Za-z0-9 _]*')+|([A-Za-z0-9_]+))+)*)");
+    final variablesRegexCompile = RegExp(        r"\s*(.*)\s*=\s*((('.*')|(.+))+(\s*\|\s*(('.*')+|(.+))+)*)"              );
     Iterable<RegExpMatch> variablesMatches = variablesRegexCompile.allMatches(code);
 
     String varName ;

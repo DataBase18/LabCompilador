@@ -68,16 +68,17 @@ class HomeBody extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: width*0.6,
+                            width: width*0.4,
                             child: InputBasic(
-                              maxLines: null,
+                              maxLines: 5,
                               keyboard: TextInputType.multiline,
                               labelTopPosition: true,
+                              expandInput: false,
                               controller: state.inputCode,
                               placeholderHelp: HomeConstants.placeholderInputCode,
                               labelText:HomeConstants.placeholderInputCode,
-                              fontSize: 30,
-                              labelFontSize: 20,
+                              fontSize: 20,
+                              labelFontSize: 15,
                             ),
                           ),
                           SizedBox(width: width*0.02,),
