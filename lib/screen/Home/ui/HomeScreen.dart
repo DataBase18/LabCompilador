@@ -55,6 +55,9 @@ class _HomeState extends State<Home> implements EventObserver {
       case SetTerminals:
         _handleSetTerminals(event as SetTerminals);
         break;
+      case SetProductionsWithoutRecursive:
+        _handleSetProductionsWithoutRecursive(event as SetProductionsWithoutRecursive);
+        break;
     }
   }
 
@@ -87,6 +90,12 @@ class _HomeState extends State<Home> implements EventObserver {
   void _handleSetTerminals(SetTerminals event) {
     setState(() {
       state.terminals = event.terminals;
+    });
+  }
+
+  void _handleSetProductionsWithoutRecursive(SetProductionsWithoutRecursive event) {
+    setState(() {
+      state.productionsWithoutRecursion = event.productionsWithoutRecursive;
     });
   }
 }

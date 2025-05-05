@@ -7,6 +7,7 @@ class HomeConstants {
 
   static const String titleTableTerminals="Vectores";
   static const String titleTableProductions="Tabla de producciones";
+  static const String titleTableProductionsWithoutRecursive="Tabla de producciones sin recursividad";
 
   static const String myName= "Abner Noé Ramírez Alvarez";
   static const String myCode= "9490-21-3265";

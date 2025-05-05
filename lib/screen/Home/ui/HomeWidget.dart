@@ -133,31 +133,69 @@ class HomeBody extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                      
-                                SizedBox(height: height*0.05,),
-                      
-                                Text(HomeConstants.titleTableProductions, style: Theme.of(context).textTheme.titleLarge,),
-                                SizedBox(height: height*0.01,),
-                                DataTable(
-                                  border: TableBorder.all(
-                                    color: Colors.black,
-                                    width: 0.4,
-                                  ),
-                                  headingRowHeight: 35,
-                                  dataRowMinHeight: 25,
-                                  dataRowMaxHeight: 30,
-                                  columns: const [
-                                    DataColumn(label: Text(HomeConstants.varsTitle), ),
-                                    DataColumn(label: Text(HomeConstants.productionTitle)),
+
+                                SizedBox(height: height*0.02,),
+
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(HomeConstants.titleTableProductions, style: Theme.of(context).textTheme.titleLarge,),
+                                        SizedBox(height: height*0.01,),
+                                        DataTable(
+                                          border: TableBorder.all(
+                                            color: Colors.black,
+                                            width: 0.4,
+                                          ),
+                                          headingRowHeight: 35,
+                                          dataRowMinHeight: 25,
+                                          dataRowMaxHeight: 30,
+                                          columns: const [
+                                            DataColumn(label: Text(HomeConstants.varsTitle), ),
+                                            DataColumn(label: Text(HomeConstants.productionTitle)),
+                                          ],
+                                          rows: state.productions.map((e) {
+                                            return DataRow(
+                                                cells: [
+                                                  DataCell(Text(e.varName), ),
+                                                  DataCell(Text(e.value))
+                                                ]
+                                            );
+                                          },).toList(),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: width*0.01,),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(HomeConstants.titleTableProductionsWithoutRecursive, style: Theme.of(context).textTheme.titleLarge,),
+                                        SizedBox(height: height*0.01,),
+                                        DataTable(
+                                          border: TableBorder.all(
+                                            color: Colors.black,
+                                            width: 0.4,
+                                          ),
+                                          headingRowHeight: 35,
+                                          dataRowMinHeight: 25,
+                                          dataRowMaxHeight: 30,
+                                          columns: const [
+                                            DataColumn(label: Text(HomeConstants.varsTitle), ),
+                                            DataColumn(label: Text(HomeConstants.productionTitle)),
+                                          ],
+                                          rows: state.productionsWithoutRecursion.map((e) {
+                                            return DataRow(
+                                                cells: [
+                                                  DataCell(Text(e.varName), ),
+                                                  DataCell(Text(e.value))
+                                                ]
+                                            );
+                                          },).toList(),
+                                        ),
+                                      ],
+                                    ),
                                   ],
-                                  rows: state.productions.map((e) {
-                                    return DataRow(
-                                        cells: [
-                                          DataCell(Text(e.varName), ),
-                                          DataCell(Text(e.value))
-                                        ]
-                                    );
-                                  },).toList(),
                                 ),
                               ],
                             ) : const NoDataList(),
