@@ -43,3 +43,10 @@ class SetProductionsWithoutRecursive extends ViewEvent {
   List<ProductionModel> productionsWithoutRecursive;
   SetProductionsWithoutRecursive(this.productionsWithoutRecursive):super("SetProductionsWithoutRecursive");
 }
+
+
+
+class SetVariablesWithoutRecursion extends ViewEvent {
+  List<CompilerVariableModel> rowsWithoutRecursion = [];
+  SetVariablesWithoutRecursion({required this.rowsWithoutRecursion}):super("SetVariablesWithoutRecursion");
+}

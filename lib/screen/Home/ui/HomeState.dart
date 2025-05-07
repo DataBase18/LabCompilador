@@ -14,4 +14,6 @@ class HomeState {
 
 
   List<ProductionModel> productionsWithoutRecursion = [];
+  List<CompilerVariableModel> varsWithoutRecursion = [];
+
 }

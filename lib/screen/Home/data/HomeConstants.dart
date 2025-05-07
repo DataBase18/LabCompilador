@@ -5,7 +5,8 @@ class HomeConstants {
   static const String productionTitle="Producción";
   static const String placeholderInputCode="Entrada de código";
 
-  static const String titleTableTerminals="Vectores";
+  static const String titleVectors="Vectores";
+  static const String titleVectorsWithoutRecursion="Vectores sin recursión";
   static const String titleTableProductions="Tabla de producciones";
   static const String titleTableProductionsWithoutRecursive="Tabla de producciones sin recursividad";
 
