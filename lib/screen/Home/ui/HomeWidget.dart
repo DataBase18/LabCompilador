@@ -65,27 +65,48 @@ class HomeBody extends StatelessWidget {
                             fontSize: 20
                         )),
                         SizedBox(height: height*0.03,),
-                        Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: width*0.4,
-                                child: InputBasic(
-                                  maxLines: 5,
-                                  keyboard: TextInputType.multiline,
-                                  labelTopPosition: true,
-                                  expandInput: false,
-                                  controller: state.inputCode,
-                                  placeholderHelp: HomeConstants.placeholderInputCode,
-                                  labelText:HomeConstants.placeholderInputCode,
-                                  fontSize: 20,
-                                  labelFontSize: 15,
-                                ),
-                              ),
-                            ],
+                        SizedBox(
+                          width: width*0.4,
+                          child: InputBasic(
+                            maxLines: 5,
+                            keyboard: TextInputType.multiline,
+                            labelTopPosition: true,
+                            expandInput: false,
+                            controller: state.inputCode,
+                            placeholderHelp: HomeConstants.placeholderInputCode,
+                            labelText:HomeConstants.placeholderInputCode,
+                            fontSize: 20,
+                            labelFontSize: 15,
                           ),
                         ),
+                        SizedBox(height: height*0.03,),
+
+                        state.functions.isNotEmpty?
+                        DataTable(
+                          border: TableBorder.all(
+                            color: Colors.black,
+                            width: 0.4,
+                          ),
+                          headingRowHeight: 35,
+                          dataRowMinHeight: 25,
+                          dataRowMaxHeight: 30,
+                          columns: const [
+                            DataColumn(label: Text(HomeConstants.functionsTitle), ),
+                            DataColumn(label: Text(HomeConstants.functionFirstTitle), ),
+                            DataColumn(label: Text(HomeConstants.functionNextTitle), ),
+                          ],
+                          rows: state.functions.map((e) {
+                            return DataRow(
+                                cells: [
+                                  DataCell(Text(e.varName), ),
+                                  DataCell(Text(e.firstFunctionInOneLine.toString()), ),
+                                  DataCell(Text(e.nextFunctionInOneLine.toString()), ),
+                                ]
+                            );
+                          },).toList(),
+                        ):Container(),
+                        SizedBox(width: width*0.01,),
+
                       ],
                     ),
                   ),

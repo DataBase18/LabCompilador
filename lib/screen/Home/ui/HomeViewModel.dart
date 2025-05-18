@@ -2,11 +2,13 @@
 import 'dart:ui';
 
 import 'package:compiladorestareauno/Model/CompilerVariableModel.dart';
+import 'package:compiladorestareauno/Model/FunctionsVarModel.dart';
 import 'package:compiladorestareauno/Model/ProductionModel.dart';
 import 'package:compiladorestareauno/core/GlobalConstants.dart';
 import 'package:compiladorestareauno/mvvm/viewModel.dart';
 import 'package:compiladorestareauno/screen/Home/domain/HomeRepository.dart';
 import 'package:compiladorestareauno/screen/Home/ui/HomeEvent.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 
@@ -139,6 +141,62 @@ class HomeViewModel extends EventViewModel {
   }
 
 
+
+  void compileFunctions({
+    required List<ProductionModel> productions,
+    required List<String> terminals,
+    required List<CompilerVariableModel> vars,
+  }){
+      List<FunctionsVarModel> functions = [];
+      for(CompilerVariableModel currentVar in vars){
+        List<String> firstFunctionForThisVar = firstFunction(
+            vars: vars,
+            terminals: terminals,
+            productions: productions,
+            varToEvaluated: currentVar.varName
+        );
+        firstFunctionForThisVar = firstFunctionForThisVar.toSet().toList();
+        List<String> nextFunctionForThisVar = nextFunction(
+            varsWithoutRecursion: vars,
+            terminals: terminals,
+            productions: productions,
+            varToEvaluated: currentVar.varName
+        );
+        nextFunctionForThisVar = nextFunctionForThisVar.toSet().toList();
+        //IN One line first
+        String firstFunctionInOneLine ="";
+        for(int i = 0; i< firstFunctionForThisVar.length; i++){
+          if(i > 0){
+            firstFunctionInOneLine = "$firstFunctionInOneLine, ${firstFunctionForThisVar.elementAt(i)}";
+          }else{
+            firstFunctionInOneLine = firstFunctionForThisVar.elementAt(i);
+          }
+        }
+
+        //IN One line next
+        String nextFunctionInOneLine ="";
+        for(int i = 0; i< nextFunctionForThisVar.length; i++){
+          if(i > 0){
+            nextFunctionInOneLine = "$nextFunctionInOneLine, ${nextFunctionForThisVar.elementAt(i)}";
+          }else{
+            nextFunctionInOneLine = nextFunctionForThisVar.elementAt(i);
+          }
+        }
+
+        functions.add(
+            FunctionsVarModel(
+              varName: currentVar.varName,
+              firstFunction: firstFunctionForThisVar,
+              nextFunction: nextFunctionForThisVar,
+              firstFunctionInOneLine: firstFunctionInOneLine,
+              nextFunctionInOneLine: nextFunctionInOneLine
+            )
+        );
+      }
+      notify(SetFirstAndNextFunctions(functions));
+  }
+
+
   void compile(String code, List<String> actualTerminals) {
     //final variablesRegexCompile = RegExp(r"\s*([A-Za-z0-9_]+)\s*=\s*((('([A-Za-z0-9 _]*)')|([A-Za-z0-9_]+))+(\s*\|\s*(('[A-Za-z0-9 _]*')+|([A-Za-z0-9_]+))+)*)");
     final variablesRegexCompile = RegExp(
@@ -251,6 +309,15 @@ class HomeViewModel extends EventViewModel {
 
     notify(SetVariablesWithoutRecursion( rowsWithoutRecursion: varsWithoutRecursion));
     notify(SetProductionsWithoutRecursive(productionsWithoutRecursion));
+
+
+    //Calculate functions (first and next)
+    compileFunctions(
+        productions: productionsWithoutRecursion,
+        terminals: terminalsWithoutRecursion,
+        vars: varsWithoutRecursion
+    );
+
   }
 
 
@@ -258,7 +325,8 @@ class HomeViewModel extends EventViewModel {
     required String varToEvaluated,
     required List<ProductionModel> productions,
     required List<String> terminals,
-    required List<CompilerVariableModel> vars
+    required List<CompilerVariableModel> vars,
+    bool removedEpsilon = false
   }) {
 
     List<String> firstFunctionElements = [];
@@ -317,12 +385,14 @@ class HomeViewModel extends EventViewModel {
         }
       }
     }
-
+    if(removedEpsilon){
+      firstFunctionElements.removeWhere((e)=> e==GlobalConstants.epsilonSymbol || e=="'${GlobalConstants.epsilonSymbol}'");
+    }
     return firstFunctionElements;
   }
 
 
-  String? _evaluateIfFirstElementFromProductionIsTerminal( ProductionModel production,  List<String> terminals){
+    String? _evaluateIfFirstElementFromProductionIsTerminal( ProductionModel production,  List<String> terminals){
     String valueProductionToEvaluate = production.value;
     //Valuate if its epsilon
     if(valueProductionToEvaluate == GlobalConstants.epsilonSymbol){
@@ -365,36 +435,124 @@ class HomeViewModel extends EventViewModel {
     required List<String> terminals,
     required List<CompilerVariableModel> vars,
   })  {
+
+    //Sub memory vars
+    List<CompilerVariableModel> newVars = List.from(vars);
+    List<String> newTerminals = List.from(terminals);
+    String valueProduction = valueProductionToEvaluated;
+
+    newVars.sort((a,b) => b.varName.length.compareTo(a.varName.length));
+    newTerminals.sort((a,b) => b.length.compareTo(a.length));
+
     List<String> elements =[];
     //first, evaluated terminals
-    for(String terminal in terminals){
+    for(String terminal in newTerminals){
       String terminalWithApostrophe = "'$terminal'";
-      if(valueProductionToEvaluated.contains(terminal)){
+      if(valueProduction.contains(terminal)){
+        //removed element to one str content
+        valueProduction = valueProduction.replaceFirst(terminalWithApostrophe, "");
         elements.add(terminalWithApostrophe);
       }
     }
     //Evaluated vars
-    for(CompilerVariableModel currentVar in vars){
+    for(CompilerVariableModel currentVar in newVars){
       String varName = currentVar.varName;
-      if(valueProductionToEvaluated.contains(varName)){
+      if(valueProduction.contains(varName)){
+        //removed element to one str content
+        valueProduction = valueProduction.replaceFirst(varName, "");
         elements.add(varName);
       }
     }
+
     elements = shortElementsToProductionInOrder(valueProductionToEvaluated, elements);
+
     return elements;
   }
 
   List<String> shortElementsToProductionInOrder(String productionValue, List<String> elements){
     List<String> shortedElements =[];
+
     while(shortedElements.length != elements.length){
       for(String element in elements){
         int longCurrentElement = element.length;
-        if(productionValue.substring(0,longCurrentElement ) == element){
+        if(longCurrentElement<= productionValue.length && productionValue.substring(0,longCurrentElement ) == element){
+          productionValue = productionValue.replaceFirst(element, "");
           shortedElements.add(element);
+          break;
         }
       }
     }
     return shortedElements;
   }
 
+
+  List<String> nextFunction({
+    required List<CompilerVariableModel> varsWithoutRecursion,
+    required List<String> terminals,
+    required List<ProductionModel> productions,
+    required String varToEvaluated,
+  }){
+
+    List<String> nextFunctionList = [];
+
+    for(ProductionModel currentProduction in productions){
+      List<String> elementsToThisProduction = getSeparatedElementsFromProduction(
+          valueProductionToEvaluated: currentProduction.value,
+          terminals: terminals,
+          vars: varsWithoutRecursion
+      );
+      //If not contains var, next production was evaluated
+      if(!elementsToThisProduction.contains(varToEvaluated)) continue;
+ 
+      //Condition to apply second rule S(B) = P(Beta)
+      int varToEvaluatedIndex = elementsToThisProduction.indexWhere((e) => e==varToEvaluated); 
+      if(varToEvaluatedIndex < (elementsToThisProduction.length-1) && varToEvaluatedIndex != -1){ //Apply Rule
+        //if is terminal, add and continue
+        String valueWithoutApostrophe = elementsToThisProduction.elementAt(varToEvaluatedIndex+1).replaceAll("'","");
+        if(terminals.contains(valueWithoutApostrophe)){
+          nextFunctionList = [...nextFunctionList, valueWithoutApostrophe];
+          continue;
+        }
+        List<String> firstFunctionToB = firstFunction(
+            varToEvaluated: valueWithoutApostrophe,
+            productions: productions,
+            terminals: terminals,
+            vars: varsWithoutRecursion,
+            removedEpsilon: true
+        );
+        nextFunctionList = [...nextFunctionList, ...firstFunctionToB];
+      }
+
+      //Condition to apply third rule, S(B) = S(A)
+      List<String> firstFunctionToB  = [];
+      if(varToEvaluatedIndex == (elementsToThisProduction.length -1)){
+        firstFunctionToB.add(GlobalConstants.epsilonSymbol);
+      }else {
+        firstFunctionToB = firstFunction(
+            varToEvaluated: elementsToThisProduction.elementAt(varToEvaluatedIndex+1),
+            productions: productions,
+            terminals: terminals,
+            vars: varsWithoutRecursion
+        );
+      }
+      if(firstFunctionToB.contains(GlobalConstants.epsilonSymbol) || firstFunctionToB.contains("'${GlobalConstants.epsilonSymbol}'") ){
+        if(varToEvaluated != currentProduction.varName){
+          List<String> nextFunctionA= nextFunction(
+              varsWithoutRecursion: varsWithoutRecursion,
+              terminals: terminals,
+              productions: productions,
+              varToEvaluated: currentProduction.varName
+          );
+          nextFunctionList = [...nextFunctionList, ...nextFunctionA];
+        }
+      }
+    }
+
+    //Remove repeat
+    nextFunctionList = nextFunctionList.toSet().toList();
+    // First rule, add delimiter symbol
+    nextFunctionList.add(GlobalConstants.delimiterSymbol);
+
+    return nextFunctionList;
+  }
 }

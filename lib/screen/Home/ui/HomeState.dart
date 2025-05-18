@@ -1,4 +1,5 @@
 import 'package:compiladorestareauno/Model/CompilerVariableModel.dart';
+import 'package:compiladorestareauno/Model/FunctionsVarModel.dart';
 import 'package:compiladorestareauno/Model/ProductionModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,4 +17,5 @@ class HomeState {
   List<ProductionModel> productionsWithoutRecursion = [];
   List<CompilerVariableModel> varsWithoutRecursion = [];
 
+  List<FunctionsVarModel> functions =[];
 }

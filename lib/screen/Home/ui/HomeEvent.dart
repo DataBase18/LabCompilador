@@ -1,5 +1,6 @@
 
 import 'package:compiladorestareauno/Model/CompilerVariableModel.dart';
+import 'package:compiladorestareauno/Model/FunctionsVarModel.dart';
 import 'package:compiladorestareauno/Model/ProductionModel.dart';
 import 'package:compiladorestareauno/mvvm/observer.dart';
 import 'package:flutter/material.dart';
@@ -50,3 +51,10 @@ class SetVariablesWithoutRecursion extends ViewEvent {
   List<CompilerVariableModel> rowsWithoutRecursion = [];
   SetVariablesWithoutRecursion({required this.rowsWithoutRecursion}):super("SetVariablesWithoutRecursion");
 }
+
+
+class SetFirstAndNextFunctions extends ViewEvent {
+  List<FunctionsVarModel> functions;
+  SetFirstAndNextFunctions(this.functions):super("SetFirstAndNextFunctions");
+}
+

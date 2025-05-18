@@ -4,6 +4,9 @@ class HomeConstants {
   static const String terminalsTitle="Terminal";
   static const String productionTitle="Producción";
   static const String placeholderInputCode="Entrada de código";
+  static const String functionsTitle="Variable";
+  static const String functionFirstTitle="Primera";
+  static const String functionNextTitle="Siguiente";
 
   static const String titleVectors="Vectores";
   static const String titleVectorsWithoutRecursion="Vectores sin recursión";
