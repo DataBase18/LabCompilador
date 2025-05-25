@@ -2,41 +2,31 @@
 
 import 'dart:convert';
 
+import 'package:compiladorestareauno/Model/ProductionModel.dart';
+
 class CompilerVariableModel {
   String varName;
-  List<String> terminals;
-  List<String> productions;
+  Set<String> terminals;
+  Set<ProductionModel> productions;
+  bool isLeftRecursive ;
 
   CompilerVariableModel({
     required this.varName,
     required this.terminals,
     required this.productions,
+    this.isLeftRecursive = false
   });
 
   CompilerVariableModel copyWith({
     String? varName,
-    List<String>? terminals,
-    List<String>? productions
+    Set<String>? terminals,
+    Set<ProductionModel>? productions,
+    bool? isLeftRecursive
   }) =>
       CompilerVariableModel(
         varName: varName ?? this.varName,
         terminals: terminals ?? this.terminals,
-        productions: productions ?? this.productions
+        productions: productions ?? this.productions,
+        isLeftRecursive: isLeftRecursive ?? this.isLeftRecursive
       );
-
-  factory CompilerVariableModel.fromRawJson(String str) => CompilerVariableModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory CompilerVariableModel.fromJson(Map<String, dynamic> json) => CompilerVariableModel(
-    varName: json["varName"],
-    terminals: List<String>.from(json["terminals"].map((x) => x)),
-    productions: List<String>.from(json["productions"].map((x) => x) )
-  );
-
-  Map<String, dynamic> toJson() => {
-    "varName": varName,
-    "terminals": List<dynamic>.from(terminals.map((x) => x)),
-    "productions": List<dynamic>.from(productions.map((x) => x)),
-  };
 }

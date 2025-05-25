@@ -199,124 +199,35 @@ class HomeViewModel extends EventViewModel {
 
   void compile(String code, List<String> actualTerminals) {
     //final variablesRegexCompile = RegExp(r"\s*([A-Za-z0-9_]+)\s*=\s*((('([A-Za-z0-9 _]*)')|([A-Za-z0-9_]+))+(\s*\|\s*(('[A-Za-z0-9 _]*')+|([A-Za-z0-9_]+))+)*)");
-    final variablesRegexCompile = RegExp(
-        r"\s*(.*)\s*=\s*((('.*')|(.+))+(\s*\|\s*(('.*')+|(.+))+)*)");
-    Iterable<RegExpMatch> variablesMatches = variablesRegexCompile.allMatches(
-        code);
+    final variablesRegexCompile = RegExp( r"\s*(.*)\s*=\s*((('.*')|(.+))+(\s*\|\s*(('.*')+|(.+))+)*)");
+    Iterable<RegExpMatch> variablesMatches = variablesRegexCompile.allMatches(code);
 
+    //Init
     String varName;
     String values;
 
-    List<CompilerVariableModel> vars = []; //Variables
-    List<String> terminals = []; //Terminals
-    List<ProductionModel> productions = []; //Productions
+    List<CompilerVariableModel> vars = [];
 
-    List<CompilerVariableModel> varsWithoutRecursion = []; //Variables
-    List<ProductionModel> productionsWithoutRecursion = []; //Productions
-    List<String> terminalsWithoutRecursion = [
-    ]; //Productions to one linea, not division from "a | b"
-
-
-    //Normal productions
+    //Generate normal vars
     for (var matches in variablesMatches) {
       varName = matches.group(1) ?? "N/A";
       values = matches.group(2) ?? "N/A";
 
-      ///Global
-      List<String> productionsForThisLine = getProductionsFromOneLineStr(
-          values);
-      List<String> terminalsForThisLine = getTerminalsFromOneLineStr(values);
-
-      ///Normal list logic
-      //Val if exits element
-      CompilerVariableModel? match = vars.firstWhere(
-              (element) => element.varName == varName,
-          orElse: () =>
-              CompilerVariableModel(varName: "", terminals: [], productions: [])
-      );
-      if (match.varName.isEmpty) { //Not exists element in list
-        vars.add(CompilerVariableModel(
-            varName: varName,
-            terminals: terminalsForThisLine,
-            productions: productionsForThisLine
-        ));
-      } else { // exists element, update values
-        int existVarIndex = vars.indexWhere((element) =>
-        element.varName == varName,);
-        CompilerVariableModel newValue = vars.elementAt(existVarIndex);
-        newValue.productions =
-        [... newValue.productions, ... productionsForThisLine];
-        newValue.terminals = [... newValue.terminals, ... terminalsForThisLine];
-        vars[existVarIndex] = newValue;
-      }
-
-
-      ///Recursion list logic
-      int varNameLength = varName.length;
-
-      String firstElement = productionsForThisLine.elementAt(0);
-      String firstValueElementValidation = firstElement.substring(
-          0, varNameLength);
-      if (firstValueElementValidation == varName) { //Its left recursive
-        //Creating alpha value
-        String alphaValue = firstElement.substring(
-            varNameLength, firstElement.length);
-
-        //Creating A' (A1 for this course)
-        String nameA1Var = "${varName}1";
-        CompilerVariableModel productionA1 = CompilerVariableModel(
-            varName: nameA1Var,
-            terminals: terminalsForThisLine,
-            productions: [
-              "$alphaValue$nameA1Var",
-              "'${GlobalConstants.epsilonSymbol}'"
-            ]
-        );
-
-        List<String> productionsWithBA1Struct = createBA1ValuesInProductions(
-            productionsForThisLine, nameA1Var);
-        CompilerVariableModel newAVar = CompilerVariableModel(
-            varName: varName,
-            terminals: terminalsForThisLine,
-            productions: productionsWithBA1Struct
-        );
-
-        varsWithoutRecursion.add(newAVar);
-        varsWithoutRecursion.add(productionA1);
-      } else {
-        varsWithoutRecursion.add(CompilerVariableModel(
-            varName: varName,
-            terminals: terminalsForThisLine,
-            productions: productionsForThisLine
-        ));
-      }
+      CompilerVariableModel validation = vars.firstWhere((e) => e.varName == varName, orElse: CompilerVariableModel(
+          varName: varName,
+          terminals: terminals,
+          productions: productions
+      ));
     }
 
 
-    productions = getListProductionsFromCompilerVariableList(vars);
-    terminals = getTerminalsFromCompilerVariableList(vars);
-
-    notify(SetVariables(rows: vars));
-    notify(SetProductions(productions));
-    notify(SetTerminals(terminals));
-
-
-    productionsWithoutRecursion =
-        getListProductionsFromCompilerVariableList(varsWithoutRecursion);
-    terminalsWithoutRecursion =
-        getTerminalsFromCompilerVariableList(varsWithoutRecursion);
-
-
-    notify(SetVariablesWithoutRecursion( rowsWithoutRecursion: varsWithoutRecursion));
-    notify(SetProductionsWithoutRecursive(productionsWithoutRecursion));
-
-
-    //Calculate functions (first and next)
-    compileFunctions(
-        productions: productionsWithoutRecursion,
-        terminals: terminalsWithoutRecursion,
-        vars: varsWithoutRecursion
-    );
+    //
+    // notify(SetVariables(rows: vars));
+    // notify(SetProductions(productions));
+    // notify(SetTerminals(terminals));
+    //
+    // notify(SetVariablesWithoutRecursion( rowsWithoutRecursion: varsWithoutRecursion));
+    // notify(SetProductionsWithoutRecursive(productionsWithoutRecursion));
 
   }
 
