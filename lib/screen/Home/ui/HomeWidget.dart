@@ -24,7 +24,7 @@ class HomeBody extends StatelessWidget {
           if (value.runtimeType == KeyDownEvent) {
             String key = value.logicalKey.keyLabel.isNotEmpty ? value.logicalKey.keyLabel : value.logicalKey.debugName!;
             if(key == "F5"){
-              viewModel.compile(state.inputCode.text, state.terminals);
+              viewModel.compile(state.inputCode.text);
             }
           }
         },
@@ -35,7 +35,7 @@ class HomeBody extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: (){
-                    viewModel.compile( state.inputCode.text, state.terminals ) ;
+                    viewModel.compile( state.inputCode.text ) ;
                   },
                   icon:  IntrinsicWidth(
                     child:   Row(
@@ -99,8 +99,8 @@ class HomeBody extends StatelessWidget {
                             return DataRow(
                                 cells: [
                                   DataCell(Text(e.varName), ),
-                                  DataCell(Text(e.firstFunctionInOneLine.toString()), ),
-                                  DataCell(Text(e.nextFunctionInOneLine.toString()), ),
+                                  DataCell(Text(e.firstFunction.toString()), ),
+                                  DataCell(Text(e.nextFunction.toString()), ),
                                 ]
                             );
                           },).toList(),

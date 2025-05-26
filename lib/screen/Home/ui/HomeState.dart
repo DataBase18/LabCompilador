@@ -9,13 +9,13 @@ class HomeState {
 
   TextEditingController inputCode = TextEditingController();
 
-  List<CompilerVariableModel> vars = [];
-  List<ProductionModel> productions = [];
-  List<String> terminals = [];
+  Set<CompilerVariableModel> vars = {};
+  Set<ProductionModel> productions = {};
+  Set<String> terminals = {};
 
 
-  List<ProductionModel> productionsWithoutRecursion = [];
-  List<CompilerVariableModel> varsWithoutRecursion = [];
+  Set<ProductionModel> productionsWithoutRecursion = {};
+  Set<CompilerVariableModel> varsWithoutRecursion = {};
 
-  List<FunctionsVarModel> functions =[];
+  Set<FunctionsVarModel> functions ={};
 }

@@ -4,7 +4,7 @@ import 'dart:convert';
 class ProductionModel {
   String varName;
   String value;
-  List<String> elements;
+  Set<String> elements;
   ProductionModel({
     required this.varName,
     required this.value,
@@ -14,7 +14,7 @@ class ProductionModel {
   ProductionModel copyWith({
     String? varName,
     String? value,
-    List<String> ? elements,
+    Set<String> ? elements,
   }) =>
       ProductionModel(
         varName: varName ?? this.varName,

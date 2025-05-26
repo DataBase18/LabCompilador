@@ -3,9 +3,9 @@ import 'dart:convert';
 
 class FunctionsVarModel {
   String varName;
-  List<String> firstFunction;
+  Set<String> firstFunction;
   String firstFunctionInOneLine;
-  List<String> nextFunction;
+  Set<String> nextFunction;
   String nextFunctionInOneLine;
 
   FunctionsVarModel({
@@ -18,8 +18,8 @@ class FunctionsVarModel {
 
   FunctionsVarModel copyWith({
     String? varName,
-    List<String>? firstFunction,
-    List<String>? nextFunction,
+    Set<String>? firstFunction,
+    Set<String>? nextFunction,
     String? nextFunctionInOneLine,
     String? firstFunctionInOneLine,
   }) =>
@@ -39,15 +39,15 @@ class FunctionsVarModel {
   factory FunctionsVarModel.fromJson(Map<String, dynamic> json) =>
       FunctionsVarModel(
         varName: json["varName"],
-        firstFunction: List<String>.from(json["firstFunction"].map((x) => x)),
-        nextFunction: List<String>.from(json["nextFunction"].map((x) => x)),
+        firstFunction: Set<String>.from(json["firstFunction"].map((x) => x)),
+        nextFunction: Set<String>.from(json["nextFunction"].map((x) => x)),
         nextFunctionInOneLine: "",
         firstFunctionInOneLine: ""
       );
 
   Map<String, dynamic> toJson() => {
     "varName": varName,
-    "firstFunction": List<dynamic>.from(firstFunction.map((x) => x)),
-    "nextFunction": List<dynamic>.from(nextFunction.map((x) => x)),
+    "firstFunction": Set<dynamic>.from(firstFunction.map((x) => x)),
+    "nextFunction": Set<dynamic>.from(nextFunction.map((x) => x)),
   };
 }

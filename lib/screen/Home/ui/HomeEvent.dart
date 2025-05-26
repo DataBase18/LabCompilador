@@ -21,40 +21,40 @@ class ChangeLoadingScreen extends ViewEvent {
 
 
 class SetVariables extends ViewEvent {
-  List<CompilerVariableModel> rows = [];
+  Set<CompilerVariableModel> rows = {};
   SetVariables({required this.rows}):super("SetVariables");
 }
 
 
 
 class SetProductions extends ViewEvent {
-  List<ProductionModel> productions;
+  Set<ProductionModel> productions;
   SetProductions(this.productions):super("SetProductions");
 }
 
 
 class SetTerminals extends ViewEvent {
-  List<String> terminals;
+  Set<String> terminals;
   SetTerminals(this.terminals):super("SetTerminals");
 }
 
 
 
 class SetProductionsWithoutRecursive extends ViewEvent {
-  List<ProductionModel> productionsWithoutRecursive;
+  Set<ProductionModel> productionsWithoutRecursive;
   SetProductionsWithoutRecursive(this.productionsWithoutRecursive):super("SetProductionsWithoutRecursive");
 }
 
 
 
 class SetVariablesWithoutRecursion extends ViewEvent {
-  List<CompilerVariableModel> rowsWithoutRecursion = [];
+  Set<CompilerVariableModel> rowsWithoutRecursion = {};
   SetVariablesWithoutRecursion({required this.rowsWithoutRecursion}):super("SetVariablesWithoutRecursion");
 }
 
 
 class SetFirstAndNextFunctions extends ViewEvent {
-  List<FunctionsVarModel> functions;
+  Set<FunctionsVarModel> functions;
   SetFirstAndNextFunctions(this.functions):super("SetFirstAndNextFunctions");
 }
 
