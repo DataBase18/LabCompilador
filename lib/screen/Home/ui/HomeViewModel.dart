@@ -131,6 +131,7 @@ class HomeViewModel extends EventViewModel {
       }
     }
 
+
     //Calculated individual Elements and recursion values
     for(CompilerVariableModel cv in vars){
       for(ProductionModel p in cv.productions){
@@ -146,6 +147,7 @@ class HomeViewModel extends EventViewModel {
       }
       vars.add(cv);
     }
+
 
   
     ///Generate without recursion vars
@@ -164,6 +166,7 @@ class HomeViewModel extends EventViewModel {
             productions: {}
         );
 
+
         //Calculated beta productions
         for(ProductionModel prod in currentVar.productions){
           if(prod.elements.isNotEmpty && prod.elements.first != currentVar.varName){
@@ -174,14 +177,15 @@ class HomeViewModel extends EventViewModel {
             ));
           } else {//Alpha production
 
-            //A1 prod
+            //A1 prod (Values change later)
             ProductionModel newProdA1 = ProductionModel(
                 varName: "${currentVar.varName}1",
                 value: prod.value,
                 elements: Set.from(prod.elements)
             );
+
             String newValue = "${newProdA1.value
-                .substring(newProdA1.varName.length, newProdA1.value.length)}${newProdA1.varName}";
+                .substring(newVar.varName.length, newProdA1.value.length)}${newProdA1.varName}";
 
             String firstElement =  newProdA1.elements.first;
             newProdA1.elements.remove(firstElement);
@@ -220,6 +224,7 @@ class HomeViewModel extends EventViewModel {
         terminals.add(t);
       }
     }
+
     notify(SetVariables(rows: vars));
     notify(SetProductions(productions));
     notify(SetTerminals(terminals));
@@ -274,7 +279,9 @@ class HomeViewModel extends EventViewModel {
   }) {
 
     Set<String> firstFunctionElements = {};
+
     for(ProductionModel currentProduction in varToEvaluated.productions){
+
 
       //validate if is var
       CompilerVariableModel varFound =
@@ -290,7 +297,8 @@ class HomeViewModel extends EventViewModel {
         String firstPosition = currentProduction.elements.first;
         firstFunctionElements.add(firstPosition);
         elementValueFinedToFirstPosition = firstPosition;
-      }else { //Second rule, if its var, calculate first function for this var
+
+      } else { //Second rule, if its var, calculate first function for this var
         Set<String> firstToThisVar =  firstFunction(
             varToEvaluated: varFound,
             allVars: allVars
@@ -310,7 +318,6 @@ class HomeViewModel extends EventViewModel {
         int indexOfElementToThisEvaluated = elementsToThisProduction.indexWhere((e){
           return e == elementValueFinedToFirstPosition;
         });
-
         String valueToEvaluatedInFirstFunctionNext ;
         //Validate if its last index
         if( (indexOfElementToThisEvaluated+1) == elementsToThisProduction.length){
@@ -321,11 +328,13 @@ class HomeViewModel extends EventViewModel {
           CompilerVariableModel? secondElement = allVars.firstWhere(
                   (a)=> a.varName==valueToEvaluatedInFirstFunctionNext
           );
-          Set<String> firstToThisVar =  firstFunction(
-              varToEvaluated: secondElement,
-              allVars: allVars
-          );
-          firstFunctionElements.addAll(firstToThisVar);
+          if(secondElement.varName != currentProduction.varName){
+            Set<String> firstToThisVar =  firstFunction(
+                varToEvaluated: secondElement,
+                allVars: allVars
+            );
+            firstFunctionElements.addAll(firstToThisVar);
+          }
         }
 
 
@@ -357,7 +366,7 @@ class HomeViewModel extends EventViewModel {
 
   Set<String> shortElementsToProductionInOrder(String productionValue, Set<String> elements){
     Set<String> shortedElements = {};
-    elements.removeWhere((e) => e == GlobalConstants.epsilonSymbol);
+    bool containsEpsilon = elements.contains(GlobalConstants.epsilonSymbol);
     while(shortedElements.length != elements.length){
       for(String element in elements){
         int longCurrentElement = element.length;
