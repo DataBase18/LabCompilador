@@ -58,3 +58,15 @@ class SetFirstAndNextFunctions extends ViewEvent {
   SetFirstAndNextFunctions(this.functions):super("SetFirstAndNextFunctions");
 }
 
+
+class SetSymbolTable extends ViewEvent {
+  List<List<String>> table;
+  SetSymbolTable(this.table):super("SetSymbolTable");
+}
+
+
+
+class SetNewDramatic extends ViewEvent {
+  String dramatic;
+  SetNewDramatic(this.dramatic):super("SetNewDramatic");
+}

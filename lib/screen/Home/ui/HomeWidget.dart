@@ -1,4 +1,5 @@
 import 'package:compiladorestareauno/screen/Home/data/HomeConstants.dart';
+import 'package:compiladorestareauno/screen/Home/ui/HomeScreen.dart';
 import 'package:compiladorestareauno/widget/InputBasic.dart';
 import 'package:compiladorestareauno/widget/NoDataList.dart';
 import 'package:flutter/material.dart';
@@ -28,269 +29,392 @@ class HomeBody extends StatelessWidget {
             }
           }
         },
-        child: Row(
+        child: Column(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Column( 
               children: [
-                IconButton(
-                  onPressed: (){
-                    viewModel.compile( state.inputCode.text ) ;
-                  },
-                  icon:  IntrinsicWidth(
-                    child:   Row(
-                      children: [
-                        const Icon(Icons.play_arrow, color: Colors.green,),
-                        SizedBox(width: width*0.01,),
-                        const Text("Execute"),
-                      ],
+                SizedBox(height: height*0.03,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(HomeConstants.myName, style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20
+                    ),),
+                    Text(HomeConstants.myCode, style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontSize: 20
+                    )),
+                    Text(HomeConstants.course, style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontSize: 20
+                    )),
+                    IconButton(
+                      onPressed: (){
+                        viewModel.compile( state.inputCode.text ) ;
+                      },
+                      icon:  IntrinsicWidth(
+                        child:   Row(
+                          children: [
+                            const Icon(Icons.play_arrow, color: Colors.green,),
+                            SizedBox(width: width*0.01,),
+                            Text("Execute", style: Theme.of(context).textTheme.titleMedium,),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: height*0.03,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: width*0.45,
+                      child: InputBasic(
+                        maxLines: 8,
+                        keyboard: TextInputType.multiline,
+                        labelTopPosition: true,
+                        expandInput: false,
+                        controller: state.inputCode,
+                        placeholderHelp: HomeConstants.placeholderInputCode,
+                        labelText:HomeConstants.placeholderInputCode,
+                        fontSize: 20,
+                        labelFontSize: 15,
+                      ),
+                    ),
+                    SizedBox(
+                      width: width*0.45,
+                      child: InputBasic(
+                        maxLines: 8,
+                        labelTopPosition: true,
+                        expandInput: false,
+                        enabled: false,
+                        controller: state.inputNewDramatic,
+                        placeholderHelp: HomeConstants.placeholderInputNewDramatic,
+                        labelText:HomeConstants.placeholderInputNewDramatic,
+                        fontSize: 20,
+                        labelFontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: height*0.02,),
+            Expanded(
+              child: state.vars.isEmpty?
+              const NoDataList():
+              SingleChildScrollView(
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  controller:state.scrollController,
+                  child: SingleChildScrollView(
+                    controller: state.scrollController,
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(HomeConstants.titleVectors, style: Theme.of(context).textTheme.titleLarge,),
+                              SizedBox(height: height*0.01,),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  DataTable(
+                                    border: TableBorder.all(
+                                      color: Colors.black,
+                                      width: 0.4,
+                                    ),
+                                    headingRowHeight: 35,
+                                    dataRowMinHeight: 25,
+                                    dataRowMaxHeight: 30,
+                                    columns: const [
+                                      DataColumn(label: Text(HomeConstants.varsTitle), ),
+                                    ],
+                                    rows: state.vars.map((e) {
+                                      return DataRow(
+                                          cells: [
+                                            DataCell(Text(e.varName), ),
+                                          ]
+                                      );
+                                    },).toList(),
+                                  ),
+                                  SizedBox(width: width*0.005,),
+                                  DataTable(
+                                    border: TableBorder.all(
+                                      color: Colors.black,
+                                      width: 0.4,
+                                    ),
+                                    headingRowHeight: 35,
+                                    dataRowMinHeight: 25,
+                                    dataRowMaxHeight: 30,
+                                    columns: const [
+                                      DataColumn(label: Text(HomeConstants.terminalsTitle)),
+                                    ],
+                                    rows: state.terminals.map((e) {
+                                      return DataRow(
+                                          cells: [
+                                            DataCell(Text(e.toString()))
+                                          ]
+                                      );
+                                    },).toList(),
+                                  ),
+                                  SizedBox(width: width*0.01,),
+
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: width*0.025,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(HomeConstants.titleTableProductions, style: Theme.of(context).textTheme.titleLarge,),
+                              SizedBox(height: height*0.01,),
+                              DataTable(
+                                border: TableBorder.all(
+                                  color: Colors.black,
+                                  width: 0.4,
+                                ),
+                                headingRowHeight: 35,
+                                dataRowMinHeight: 25,
+                                dataRowMaxHeight: 30,
+                                columns: const [
+                                  DataColumn(label: Text(HomeConstants.varsTitle), ),
+                                  DataColumn(label: Text(HomeConstants.productionTitle)),
+                                ],
+                                rows: state.productions.map((e) {
+                                  return DataRow(
+                                      cells: [
+                                        DataCell(Text(e.varName), ),
+                                        DataCell(Text(e.value))
+                                      ]
+                                  );
+                                },).toList(),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: width*0.025,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(HomeConstants.titleVectorsWithoutRecursion, style: Theme.of(context).textTheme.titleLarge,),
+                              SizedBox(height: height*0.01,),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  DataTable(
+                                    border: TableBorder.all(
+                                      color: Colors.black,
+                                      width: 0.4,
+                                    ),
+                                    headingRowHeight: 35,
+                                    dataRowMinHeight: 25,
+                                    dataRowMaxHeight: 30,
+                                    columns: const [
+                                      DataColumn(label: Text(HomeConstants.varsTitle), ),
+                                    ],
+                                    rows: state.varsWithoutRecursion.map((e) {
+                                      return DataRow(
+                                          cells: [
+                                            DataCell(Text(e.varName), ),
+                                          ]
+                                      );
+                                    },).toList(),
+                                  ),
+                                  SizedBox(width: width*0.01,),
+                                  DataTable(
+                                    border: TableBorder.all(
+                                      color: Colors.black,
+                                      width: 0.4,
+                                    ),
+                                    headingRowHeight: 35,
+                                    dataRowMinHeight: 25,
+                                    dataRowMaxHeight: 30,
+                                    columns: const [
+                                      DataColumn(label: Text(HomeConstants.terminalsTitle)),
+                                    ],
+                                    rows: state.terminals.map((e) {
+                                      return DataRow(
+                                          cells: [
+                                            DataCell(Text(e.toString()))
+                                          ]
+                                      );
+                                    },).toList(),
+                                  ),
+
+                                  SizedBox(width: width*0.01,),
+
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: width*0.025,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(HomeConstants.titleTableProductionsWithoutRecursive,
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              SizedBox(height: height*0.01,),
+                              DataTable(
+                                border: TableBorder.all(
+                                  color: Colors.black,
+                                  width: 0.4,
+                                ),
+                                headingRowHeight: 35,
+                                dataRowMinHeight: 25,
+                                dataRowMaxHeight: 30,
+                                columns: const [
+                                  DataColumn(label: Text(HomeConstants.varsTitle), ),
+                                  DataColumn(label: Text(HomeConstants.productionTitle)),
+                                ],
+                                rows: state.productionsWithoutRecursion.map((e) {
+                                  return DataRow(
+                                      cells: [
+                                        DataCell(Text(e.varName), ),
+                                        DataCell(Text(e.value))
+                                      ]
+                                  );
+                                },).toList(),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: width*0.025,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(HomeConstants.titleFunctions, style: Theme.of(context).textTheme.titleLarge,),
+                              SizedBox(height: height*0.01,),
+                              DataTable(
+                                border: TableBorder.all(
+                                  color: Colors.black,
+                                  width: 0.4,
+                                ),
+                                headingRowHeight: 35,
+                                dataRowMinHeight: 25,
+                                dataRowMaxHeight: 30,
+                                columns: const [
+                                  DataColumn(label: Text(HomeConstants.functionsTitle), ),
+                                  DataColumn(label: Text(HomeConstants.functionFirstTitle), ),
+                                  DataColumn(label: Text(HomeConstants.functionNextTitle), ),
+                                ],
+                                rows: state.functions.map((e) {
+                                  return DataRow(
+                                      cells: [
+                                        DataCell(Text(e.varName), ),
+                                        DataCell(Text(e.firstFunction.toString()), ),
+                                        DataCell(Text(e.nextFunction.toString()), ),
+                                      ]
+                                  );
+                                },).toList(),
+                              )
+                            ],
+                          ),
+                          SizedBox(width: width*0.025,),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(HomeConstants.titleTableSymbol, style: Theme.of(context).textTheme.titleLarge,),
+                              SizedBox(height: height*0.01,),
+                              DataTable(
+                                border: TableBorder.all(
+                                  color: Colors.black,
+                                  width: 0.4,
+                                ),
+                                headingRowHeight: 35,
+                                dataRowMinHeight: 25,
+                                dataRowMaxHeight: 30,
+                                columns: state.symbolTable[0].map((t){
+                                  return  DataColumn(
+                                    label: Text(t)
+                                  );
+                                }).toList(),
+                                rows: state.symbolTable.skip(1).map((currentVar) {
+                                  return DataRow(
+                                      cells: currentVar.map((value){
+                                        return DataCell(Text(value));
+                                      }).toList()
+                                  );
+                                },).toList(),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding:  EdgeInsets.symmetric(horizontal: width*0.01, vertical: height*0.01),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: height*0.02,),
-                        Text(HomeConstants.myName, style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30
-                        ),),
-                        Text(HomeConstants.myCode, style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontSize: 25
-                        )),
-                        Text(HomeConstants.course, style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontSize: 20
-                        )),
-                        SizedBox(height: height*0.03,),
-                        SizedBox(
-                          width: width*0.4,
-                          child: InputBasic(
-                            maxLines: 5,
-                            keyboard: TextInputType.multiline,
-                            labelTopPosition: true,
-                            expandInput: false,
-                            controller: state.inputCode,
-                            placeholderHelp: HomeConstants.placeholderInputCode,
-                            labelText:HomeConstants.placeholderInputCode,
-                            fontSize: 20,
-                            labelFontSize: 15,
-                          ),
+              ),
+            )
+          ],
+        )
+      ),
+    );
+  }
+}
+
+
+
+
+/*
+
+                  SizedBox(width: width*0.02),
+
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(HomeConstants.titleFunctions, style: Theme.of(context).textTheme.titleLarge,),
+                      SizedBox(height: height*0.01,),
+                      DataTable(
+                        border: TableBorder.all(
+                          color: Colors.black,
+                          width: 0.4,
                         ),
-                        SizedBox(height: height*0.03,),
-
-                        state.functions.isNotEmpty?
-                        DataTable(
-                          border: TableBorder.all(
-                            color: Colors.black,
-                            width: 0.4,
-                          ),
-                          headingRowHeight: 35,
-                          dataRowMinHeight: 25,
-                          dataRowMaxHeight: 30,
-                          columns: const [
-                            DataColumn(label: Text(HomeConstants.functionsTitle), ),
-                            DataColumn(label: Text(HomeConstants.functionFirstTitle), ),
-                            DataColumn(label: Text(HomeConstants.functionNextTitle), ),
-                          ],
-                          rows: state.functions.map((e) {
-                            return DataRow(
-                                cells: [
-                                  DataCell(Text(e.varName), ),
-                                  DataCell(Text(e.firstFunction.toString()), ),
-                                  DataCell(Text(e.nextFunction.toString()), ),
-                                ]
-                            );
-                          },).toList(),
-                        ):Container(),
-                        SizedBox(width: width*0.01,),
-
-                      ],
-                    ),
+                        headingRowHeight: 35,
+                        dataRowMinHeight: 25,
+                        dataRowMaxHeight: 30,
+                        columns: const [
+                          DataColumn(label: Text(HomeConstants.functionsTitle), ),
+                          DataColumn(label: Text(HomeConstants.functionFirstTitle), ),
+                          DataColumn(label: Text(HomeConstants.functionNextTitle), ),
+                        ],
+                        rows: state.functions.map((e) {
+                          return DataRow(
+                              cells: [
+                                DataCell(Text(e.varName), ),
+                                DataCell(Text(e.firstFunction.toString()), ),
+                                DataCell(Text(e.nextFunction.toString()), ),
+                              ]
+                          );
+                        },).toList(),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
+
+
             Expanded(
               child: state.vars.isNotEmpty ? Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          children: [
-                            Text(HomeConstants.titleVectors, style: Theme.of(context).textTheme.titleLarge,),
-                            SizedBox(height: height*0.01,),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                DataTable(
-                                  border: TableBorder.all(
-                                    color: Colors.black,
-                                    width: 0.4,
-                                  ),
-                                  headingRowHeight: 35,
-                                  dataRowMinHeight: 25,
-                                  dataRowMaxHeight: 30,
-                                  columns: const [
-                                    DataColumn(label: Text(HomeConstants.varsTitle), ),
-                                  ],
-                                  rows: state.vars.map((e) {
-                                    return DataRow(
-                                        cells: [
-                                          DataCell(Text(e.varName), ),
-                                        ]
-                                    );
-                                  },).toList(),
-                                ),
-                                SizedBox(width: width*0.01,),
-                                DataTable(
-                                  border: TableBorder.all(
-                                    color: Colors.black,
-                                    width: 0.4,
-                                  ),
-                                  headingRowHeight: 35,
-                                  dataRowMinHeight: 25,
-                                  dataRowMaxHeight: 30,
-                                  columns: const [
-                                    DataColumn(label: Text(HomeConstants.terminalsTitle)),
-                                  ],
-                                  rows: state.terminals.map((e) {
-                                    return DataRow(
-                                        cells: [
-                                          DataCell(Text(e.toString()))
-                                        ]
-                                    );
-                                  },).toList(),
-                                ),
 
-                                SizedBox(width: width*0.01,),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: width*0.02,),
-                        Column(
-                          children: [
-                            Text(HomeConstants.titleVectorsWithoutRecursion, style: Theme.of(context).textTheme.titleLarge,),
-                            SizedBox(height: height*0.01,),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                DataTable(
-                                  border: TableBorder.all(
-                                    color: Colors.black,
-                                    width: 0.4,
-                                  ),
-                                  headingRowHeight: 35,
-                                  dataRowMinHeight: 25,
-                                  dataRowMaxHeight: 30,
-                                  columns: const [
-                                    DataColumn(label: Text(HomeConstants.varsTitle), ),
-                                  ],
-                                  rows: state.varsWithoutRecursion.map((e) {
-                                    return DataRow(
-                                        cells: [
-                                          DataCell(Text(e.varName), ),
-                                        ]
-                                    );
-                                  },).toList(),
-                                ),
-                                SizedBox(width: width*0.01,),
-                                DataTable(
-                                  border: TableBorder.all(
-                                    color: Colors.black,
-                                    width: 0.4,
-                                  ),
-                                  headingRowHeight: 35,
-                                  dataRowMinHeight: 25,
-                                  dataRowMaxHeight: 30,
-                                  columns: const [
-                                    DataColumn(label: Text(HomeConstants.terminalsTitle)),
-                                  ],
-                                  rows: state.terminals.map((e) {
-                                    return DataRow(
-                                        cells: [
-                                          DataCell(Text(e.toString()))
-                                        ]
-                                    );
-                                  },).toList(),
-                                ),
-
-                                SizedBox(width: width*0.01,),
-
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
                     SizedBox(height: height*0.02,),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          children: [
-                            Text(HomeConstants.titleTableProductions, style: Theme.of(context).textTheme.titleLarge,),
-                            SizedBox(height: height*0.01,),
-                            DataTable(
-                              border: TableBorder.all(
-                                color: Colors.black,
-                                width: 0.4,
-                              ),
-                              headingRowHeight: 35,
-                              dataRowMinHeight: 25,
-                              dataRowMaxHeight: 30,
-                              columns: const [
-                                DataColumn(label: Text(HomeConstants.varsTitle), ),
-                                DataColumn(label: Text(HomeConstants.productionTitle)),
-                              ],
-                              rows: state.productions.map((e) {
-                                return DataRow(
-                                    cells: [
-                                      DataCell(Text(e.varName), ),
-                                      DataCell(Text(e.value))
-                                    ]
-                                );
-                              },).toList(),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: width*0.01,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(HomeConstants.titleTableProductionsWithoutRecursive, style: Theme.of(context).textTheme.titleLarge,),
-                            SizedBox(height: height*0.01,),
-                            DataTable(
-                              border: TableBorder.all(
-                                color: Colors.black,
-                                width: 0.4,
-                              ),
-                              headingRowHeight: 35,
-                              dataRowMinHeight: 25,
-                              dataRowMaxHeight: 30,
-                              columns: const [
-                                DataColumn(label: Text(HomeConstants.varsTitle), ),
-                                DataColumn(label: Text(HomeConstants.productionTitle)),
-                              ],
-                              rows: state.productionsWithoutRecursion.map((e) {
-                                return DataRow(
-                                    cells: [
-                                      DataCell(Text(e.varName), ),
-                                      DataCell(Text(e.value))
-                                    ]
-                                );
-                              },).toList(),
-                            ),
-                          ],
-                        ),
+
+                        SizedBox(width: width*0.025,),
+
                       ],
                     ),
                   ],
@@ -299,7 +423,5 @@ class HomeBody extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
-  }
-}
+
+**/

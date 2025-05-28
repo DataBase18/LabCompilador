@@ -64,6 +64,12 @@ class _HomeState extends State<Home> implements EventObserver {
       case SetFirstAndNextFunctions:
         _handleSetFirstAndNextFunctions(event as SetFirstAndNextFunctions);
         break;
+      case SetSymbolTable:
+        _handleSetSymbolTable(event as SetSymbolTable);
+        break;
+      case SetNewDramatic:
+        _handleSetNewDramatic(event as SetNewDramatic);
+        break;
     }
   }
 
@@ -114,6 +120,18 @@ class _HomeState extends State<Home> implements EventObserver {
   void _handleSetFirstAndNextFunctions(SetFirstAndNextFunctions event) {
     setState(() {
       state.functions  = event.functions;
+    });
+  }
+
+  void _handleSetSymbolTable(SetSymbolTable event) {
+    setState(() {
+      state.symbolTable = event.table;
+    });
+  }
+
+  void _handleSetNewDramatic(SetNewDramatic event) {
+    setState(() {
+      state.inputNewDramatic.text = event.dramatic;
     });
   }
 }

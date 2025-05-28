@@ -7,6 +7,7 @@ class FunctionsVarModel {
   String firstFunctionInOneLine;
   Set<String> nextFunction;
   String nextFunctionInOneLine;
+  Set<String> productionsInTableSymbols;
 
   FunctionsVarModel({
     required this.varName,
@@ -14,6 +15,7 @@ class FunctionsVarModel {
     required this.nextFunction,
     this.firstFunctionInOneLine ="",
     this.nextFunctionInOneLine ="",
+    required this.productionsInTableSymbols,
   });
 
   FunctionsVarModel copyWith({
@@ -22,13 +24,15 @@ class FunctionsVarModel {
     Set<String>? nextFunction,
     String? nextFunctionInOneLine,
     String? firstFunctionInOneLine,
+    Set<String>? productionsInTableSymbols
   }) =>
       FunctionsVarModel(
         varName: varName ?? this.varName,
         firstFunction: firstFunction ?? this.firstFunction,
         nextFunction: nextFunction ?? this.nextFunction,
         firstFunctionInOneLine: firstFunctionInOneLine ?? this.nextFunctionInOneLine,
-        nextFunctionInOneLine: nextFunctionInOneLine ?? this.nextFunctionInOneLine
+        nextFunctionInOneLine: nextFunctionInOneLine ?? this.nextFunctionInOneLine,
+        productionsInTableSymbols:  productionsInTableSymbols  ?? this.productionsInTableSymbols
       );
 
   factory FunctionsVarModel.fromRawJson(String str) =>
@@ -42,7 +46,8 @@ class FunctionsVarModel {
         firstFunction: Set<String>.from(json["firstFunction"].map((x) => x)),
         nextFunction: Set<String>.from(json["nextFunction"].map((x) => x)),
         nextFunctionInOneLine: "",
-        firstFunctionInOneLine: ""
+        firstFunctionInOneLine: "",
+        productionsInTableSymbols: {}
       );
 
   Map<String, dynamic> toJson() => {

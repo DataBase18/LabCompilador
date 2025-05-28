@@ -1,6 +1,4 @@
 
-import 'dart:ffi';
-import 'dart:ui';
 
 import 'package:compiladorestareauno/Model/CompilerVariableModel.dart';
 import 'package:compiladorestareauno/Model/FunctionsVarModel.dart';
@@ -9,8 +7,7 @@ import 'package:compiladorestareauno/core/GlobalConstants.dart';
 import 'package:compiladorestareauno/mvvm/viewModel.dart';
 import 'package:compiladorestareauno/screen/Home/domain/HomeRepository.dart';
 import 'package:compiladorestareauno/screen/Home/ui/HomeEvent.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
 
 class HomeViewModel extends EventViewModel {
@@ -225,6 +222,8 @@ class HomeViewModel extends EventViewModel {
       }
     }
 
+
+    ///Update ui changes
     notify(SetVariables(rows: vars));
     notify(SetProductions(productions));
     notify(SetTerminals(terminals));
@@ -238,15 +237,20 @@ class HomeViewModel extends EventViewModel {
         productionsWithoutRecursion.add(p);
       }
     }
+
+    ///Update ui changes
     notify(SetVariablesWithoutRecursion( rowsWithoutRecursion: varsWithoutRecursion));
     notify(SetProductionsWithoutRecursive(productionsWithoutRecursion));
 
-
-    ///First and second funciton
+    ///First and next functions
     Set<FunctionsVarModel> functions = {};
     for(CompilerVariableModel v in varsWithoutRecursion){
-      Set<String> firstFunc =firstFunction(varToEvaluated: v, allVars: varsWithoutRecursion);
-
+      //Fist
+      Set<String> firstFunc =firstFunction(
+          varToEvaluated: v,
+          allVars: varsWithoutRecursion
+      );
+      //Next
       Set<String> nextFunctionList =nextFunction(
           varsWithoutRecursion: varsWithoutRecursion,
           allProductions: productionsWithoutRecursion,
@@ -257,18 +261,70 @@ class HomeViewModel extends EventViewModel {
           FunctionsVarModel(
               varName: v.varName,
               firstFunction: firstFunc,
-              nextFunction:nextFunctionList
+              nextFunction:nextFunctionList,
+              productionsInTableSymbols: {}
           )
       );
-
     }
     notify(SetFirstAndNextFunctions(functions));
-    Set<String> nextFunc =nextFunction(
-      varsWithoutRecursion: varsWithoutRecursion,
-      varToEvaluated: "T",
-      allProductions: productionsWithoutRecursion
-    );
-    print(nextFunc);
+
+    ///Generate Symbol table
+    List<List<String>> table = List.generate(functions.length+1, (e)=>List.filled(terminals.length+2, "") );
+    //Add columns
+    List<String> columns = [... [""], ...terminals, ...[GlobalConstants.delimiterSymbol]];
+    table[0] = columns;
+
+    ///Generate  table
+    for(int indexVar = 1; indexVar<= functions.length; indexVar++){
+
+      FunctionsVarModel fvm = functions.elementAt(indexVar-1);
+      table[indexVar][0] =fvm.varName;
+      CompilerVariableModel foundVar = varsWithoutRecursion.firstWhere((v)=>v.varName==fvm.varName);
+
+      for(int indexProd = 0 ; indexProd < foundVar.productions.length; indexProd++){
+        ProductionModel p = foundVar.productions.elementAt(indexProd);
+        String firstElementForThisProduction = p.elements.first;
+
+        if(fvm.firstFunction.contains(firstElementForThisProduction)){ //Init a terminal
+          if(firstElementForThisProduction != GlobalConstants.epsilonSymbol){
+            int indexTerminalInTable= table[0].indexWhere((e)=>e == firstElementForThisProduction);
+            table[indexVar][indexTerminalInTable] = p.value;
+          }
+        }else{ //Its var
+          for(String terminalInFirstFunc in fvm.firstFunction){
+            int indexTerminalInFirstFunc = table[0].indexWhere((e)=>e == terminalInFirstFunc);
+            table[indexVar][indexTerminalInFirstFunc] = p.value;
+          }
+        }
+
+        //Next function rule
+        if(fvm.firstFunction.contains(GlobalConstants.epsilonSymbol)){
+          for(String terminalInNextFunc in fvm.nextFunction){
+            int indexTerminalInNextFunc = table[0].indexWhere((e)=>e == terminalInNextFunc);
+            table[indexVar][indexTerminalInNextFunc] = GlobalConstants.epsilonSymbol;
+          }
+        }
+
+      }
+
+    }
+
+    ///Update ui changes
+    notify(SetSymbolTable(table));
+
+    ///Generate new Dramatic
+    String newDramatic = "";
+    for(CompilerVariableModel v in varsWithoutRecursion){
+      newDramatic = "$newDramatic\n${v.varName}=";
+      for(ProductionModel p in v.productions){
+        newDramatic = "$newDramatic ${p.value}";
+        if(v.productions.last.value != p.value){
+          newDramatic = "$newDramatic|";
+        }
+      }
+    }
+    newDramatic=newDramatic.trim();
+    notify(SetNewDramatic(newDramatic));
   }
 
 
