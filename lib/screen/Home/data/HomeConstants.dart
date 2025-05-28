@@ -8,6 +8,8 @@ class HomeConstants {
   static const String functionsTitle="Variable";
   static const String functionFirstTitle="Primera";
   static const String functionNextTitle="Siguiente";
+  static const String leftTabTitle="Vectores y matrices";
+  static const String rightTabTitle="Tabla de simbolos";
 
   static const String titleVectors="Vectores";
   static const String titleVectorsWithoutRecursion="Vectores sin recursión";
