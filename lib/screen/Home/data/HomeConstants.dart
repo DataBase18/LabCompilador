@@ -26,4 +26,6 @@ class HomeConstants {
   static const String tileTitleVectors= "Vectores";
   static const String tileTitleProductions= "Producciones";
   static const String tileTitleSymbolTable= "Tabla de Símbolos";
+
+  static const String helperTextExecuteButton = "Ejecutar (F5)";
 }

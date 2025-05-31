@@ -47,17 +47,22 @@ class HomeBody extends StatelessWidget {
                     Text(HomeConstants.course, style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontSize: 20
                     )),
-                    IconButton(
-                      onPressed: (){
-                        viewModel.compile( state.inputCode.text ) ;
-                      },
-                      icon:  IntrinsicWidth(
-                        child:   Row(
-                          children: [
-                            const Icon(Icons.play_arrow, color: Colors.green,),
-                            SizedBox(width: width*0.01,),
-                            Text("Execute", style: Theme.of(context).textTheme.titleMedium,),
-                          ],
+                    Tooltip(
+                      message: HomeConstants.helperTextExecuteButton,
+                      waitDuration: const Duration(milliseconds: 500),
+                      showDuration: const Duration(seconds: 5),
+                      child: IconButton(
+                        onPressed: (){
+                          viewModel.compile( state.inputCode.text ) ;
+                        },
+                        icon:  IntrinsicWidth(
+                          child:   Row(
+                            children: [
+                              const Icon(Icons.play_arrow, color: Colors.green,),
+                              SizedBox(width: width*0.01,),
+                              Text("Execute", style: Theme.of(context).textTheme.titleMedium,),
+                            ],
+                          ),
                         ),
                       ),
                     ),
